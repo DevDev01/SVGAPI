@@ -18,22 +18,37 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+    - name: Debug SSH environment variables
+      run: |
+        echo "SERVER_IP: $SERVER_IP"
+        echo "SERVER_USER: $SERVER_USER"
+
     - name: Deploy to server using screen and nohup
       env:
         SERVER_IP: ${{ secrets.SERVER_IP }}
         SERVER_USER: ${{ secrets.SERVER_USER }}
       run: |
+        echo "Deploying to $SERVER_USER@$SERVER_IP"
+        
         # SSH into the server and run FastAPI inside a screen session
         ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+          # Debug SSH connection
+          echo "Connected to $SERVER_USER@$SERVER_IP"
+
           # Check if a screen session named 'fastapi' already exists
+          screen -ls
           screen -ls | grep -q "fastapi" || screen -dmS fastapi
 
-          # If the session is not running, start the FastAPI app in the 'fastapi' session
+          # Start the FastAPI app in the 'fastapi' screen session
           screen -S fastapi -X quit || screen -S fastapi -dm bash -c "
+            echo 'Starting FastAPI App...' &&
             cd /root/SVGAPI &&
             git pull origin main &&
             source .venv/bin/activate &&
             pip install -r requirements.txt &&
             nohup python3 main.py > output.log 2>&1 &
           "
+
+          # Check if the screen session was created successfully
+          screen -ls
         EOF
