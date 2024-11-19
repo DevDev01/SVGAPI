@@ -35,5 +35,5 @@ jobs:
             git pull origin main &&
             source .venv/bin/activate &&
             pip install -r requirements.txt &&
-            tmux new-session -d -s fastapi 'cd /root/SVGAPI && source .venv/bin/activate && python3 main.py'
+            sudo systemctl restart fastapi.service
         EOF
