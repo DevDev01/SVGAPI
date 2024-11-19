@@ -1,0 +1,39 @@
+name: Deploy to Linux Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.10.4
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to server using screen and nohup
+      env:
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+      run: |
+        # SSH into the server and run FastAPI inside a screen session
+        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+          # Check if a screen session named 'fastapi' already exists
+          screen -ls | grep -q "fastapi" || screen -dmS fastapi
+
+          # If the session is not running, start the FastAPI app in the 'fastapi' session
+          screen -S fastapi -X quit || screen -S fastapi -dm bash -c "
+            cd /root/SVGAPI &&
+            git pull origin main &&
+            source .venv/bin/activate &&
+            pip install -r requirements.txt &&
+            nohup python3 main.py > output.log 2>&1 &
+          "
+        EOF
