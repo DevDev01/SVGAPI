@@ -29,4 +29,4 @@ def generate_text(grayscale: int, text: str):
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host='192.168.1.174', port=3000)
+    uvicorn.run(app, host='192.168.1.174', port=80)
