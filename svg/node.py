@@ -74,7 +74,6 @@ class Node:
         return nodes_str
 
     def as_string(self) -> str:
-        print(self.text)
         self._style.populate_node(self)
         if self._is_self_closing:
             return f'<{self._tag}{self.stringify_attributes()} />'
