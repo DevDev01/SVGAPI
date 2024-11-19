@@ -24,7 +24,8 @@ def generate_text(grayscale: int, text: str):
     text.set_attribute('text-anchor', 'middle')
     text.set_attribute('dominant-baseline', 'middle')
     svg.add_node(text)
-    cairosvg.svg2png(svg.as_string().encode('utf-8'), output_width=svg.width, output_height=svg.height)
+    png_data = cairosvg.svg2png(svg.as_string(), output_width=svg.width, output_height=svg.height)
+    return StreamingResponse(io.BytesIO(png_data), media_type='image/png')
 
 if __name__ == '__main__':
     import uvicorn
