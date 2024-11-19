@@ -36,11 +36,11 @@ jobs:
           echo "Connected to $SERVER_USER@$SERVER_IP"
 
           # Check if a screen session named 'fastapi' already exists
-          screen -ls
-          screen -ls | grep -q "fastapi" || screen -dmS fastapi
+          sudo screen -ls
+          sudo screen -ls | grep -q "fastapi" || screen -dmS fastapi
 
           # Start the FastAPI app in the 'fastapi' screen session
-          screen -S fastapi -X quit || screen -S fastapi -dm bash -c "
+          sudo screen -S fastapi -X quit || screen -S fastapi -dm bash -c "
             echo 'Starting FastAPI App...' &&
             cd /root/SVGAPI &&
             git pull origin main &&
@@ -50,5 +50,5 @@ jobs:
           "
 
           # Check if the screen session was created successfully
-          screen -ls
+          sudo screen -ls
         EOF
