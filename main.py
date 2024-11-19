@@ -4,7 +4,6 @@ from svg import SVG, Color
 import cairosvg
 import io
 
-
 app = FastAPI()
 
 @app.get("/svg/{grayscale}")
