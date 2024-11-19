@@ -17,7 +17,7 @@ def generate_gray(grayscale: int):
 def generate_text(grayscale: int, text: str):
     svg = SVG(512, 128)
     svg.background(color=Color(grayscale=grayscale))
-    text = Text(text, Vector2(0, 0))
+    text = Text(text.replace('-', ' '), Vector2(0, 0))
     text.set_attribute('x', '50%')
     text.set_attribute('y', '50%')
     text.set_attribute('style', 'font-size: 32; font-family: Comic Sans MS;')
