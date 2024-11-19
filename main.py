@@ -15,7 +15,7 @@ def generate_gray(grayscale: int):
 
 @app.get('/text/{grayscale}/{text}')
 def generate_text(grayscale: int, text: str):
-    svg = SVG(128, 48)
+    svg = SVG(128, 128)
     svg.background(color=Color(grayscale=grayscale))
     text = Text(text, Vector2(0, 0))
     text.set_attribute('x', '50%')
