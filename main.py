@@ -15,12 +15,12 @@ def generate_gray(grayscale: int):
 
 @app.get('/text/{grayscale}/{text}')
 def generate_text(grayscale: int, text: str):
-    svg = SVG(128, 128)
+    svg = SVG(128, 48)
     svg.background(color=Color(grayscale=grayscale))
     text = Text(text, Vector2(0, 0))
     text.set_attribute('x', '50%')
     text.set_attribute('y', '50%')
-    text.set_attribute('style', 'font-size: 16; font-family: Comic Sans MS;')
+    text.set_attribute('style', 'font-size: 32; font-family: Comic Sans MS;')
     text.set_attribute('text-anchor', 'middle')
     text.set_attribute('dominant-baseline', 'middle')
     svg.add_node(text)
