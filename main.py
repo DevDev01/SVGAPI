@@ -1,18 +1,30 @@
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
-from svg import SVG, Color
+from svg import SVG, Color, Text, Vector2
 import cairosvg
 import io
 
 app = FastAPI()
 
-@app.get("/svg/{grayscale}")
-def generate_svg(grayscale: int):
+@app.get('/gray/{grayscale}')
+def generate_gray(grayscale: int):
     svg = SVG(128, 128)
     svg.background(color=Color(grayscale=grayscale))
     png_data = cairosvg.svg2png(svg.as_string(), output_width=svg.width, output_height=svg.height)
     return StreamingResponse(io.BytesIO(png_data), media_type='image/png')
 
+@app.get('/text/{grayscale}/{text}')
+def generate_text(grayscale: int, text: str):
+    svg = SVG(128, 128)
+    svg.background(color=Color(grayscale=grayscale))
+    text = Text(text, Vector2(0, 0))
+    text.set_attribute('x', '50%')
+    text.set_attribute('y', '50%')
+    text.set_attribute('style', 'font-size: 16; font-family: Comic Sans MS;')
+    text.set_attribute('text-anchor', 'middle')
+    text.set_attribute('dominant-baseline', 'middle')
+    svg.add_node(text)
+    cairosvg.svg2png(svg.as_string().encode('utf-8'), output_width=svg.width, output_height=svg.height)
 
 if __name__ == '__main__':
     import uvicorn

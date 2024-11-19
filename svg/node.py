@@ -28,6 +28,7 @@ class Node:
     _attributes: List[Tuple[str, str]]
     _child_nodes: List['Node']
     _style: Style
+    _text: str
 
     def __init__(self, tag: str, is_self_closing: bool = True):
         self._tag = tag
@@ -35,6 +36,7 @@ class Node:
         self._attributes = []
         self._child_nodes = []
         self._style = Style()
+        self._text = ''
     
     #Shared
     def set_attribute(self, key: str, value) -> None:
@@ -72,11 +74,12 @@ class Node:
         return nodes_str
 
     def as_string(self) -> str:
+        print(self.text)
         self._style.populate_node(self)
         if self._is_self_closing:
             return f'<{self._tag}{self.stringify_attributes()} />'
         else:
-            return f'<{self._tag}{self.stringify_attributes()}>{self.stringify_child_nodes()}</{self._tag}>'
+            return f'<{self._tag}{self.stringify_attributes()}>{self._text}{self.stringify_child_nodes()}</{self._tag}>'
     
     #Styling
     def fill(self, color: Color = None, rgb: Tuple[int, int, int] = None, grayscale: int = None, hex: str = None, alpha: int = 255) -> None:
@@ -102,3 +105,11 @@ class Node:
     @style.setter
     def style(self, value: Style) -> None:
         self._style = value
+    
+    @property
+    def text(self) -> str:
+        return self._text
+    
+    @text.setter
+    def text(self, value: str) -> None:
+        self._text = value

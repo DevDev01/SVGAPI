@@ -2,7 +2,7 @@ from .node import Node
 from .vector2 import Vector2
 from typing import Tuple
 
-class Shape(Node):
+class PositionedNode(Node):
     _position: Vector2
     _position_key: Tuple[str, str]
 

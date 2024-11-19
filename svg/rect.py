@@ -1,7 +1,7 @@
-from .shape import Shape
+from .positioned_node import PositionedNode
 from .vector2 import Vector2
 
-class Rect(Shape):
+class Rect(PositionedNode):
     _width: float
     _height: float
 
